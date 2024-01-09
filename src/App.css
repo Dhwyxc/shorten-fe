@@ -53,3 +53,16 @@ button {
   border: unset !important;
   
 }
+
+.glass-container {
+  background: rgba(255, 153, 0, 0.9);
+  backdrop-filter: blur(10px);
+  border-radius: 30px;
+  padding: 20px;
+}
+
+.landing-page-container {
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 20px;
+}
+

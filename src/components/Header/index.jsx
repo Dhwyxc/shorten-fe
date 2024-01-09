@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from "react";
+import React, { useEffect, useState } from "react";
 import useGetProfile from "@modules/auth/hooks/useGetProfile";
 import { useAppSelector } from "@hooks/reduxHook";
 import useLogout from "@modules/auth/hooks/useLogout";
@@ -9,28 +9,22 @@ import { Link } from "react-router-dom";
 import { useMatch, useParams } from "react-router";
 import logo from "@assets/logo.jpg";
 import useShowProject from "@modules/projects/hooks/query/useShowProject";
+import { useNavigate } from "react-router-dom/dist";
+
 const Header = () => {
   const { data: u } = useGetProfile();
   const user = useAppSelector((s) => s?.auth?.user);
   const { mutate: logout } = useLogout();
   const match = useMatch("/projects/:projectId/*");
   const projectId = match?.params?.projectId;
-  // const logout=()=>{
 
-  // }
-  // {user?.type === "SUPER_ADMIN" && (
-  //   <li>
-  //     <Link to={"/projects"}>Project</Link>
-  //   </li>
-  // )}
-  // {user?.type === "QC" && (
-  //   <li>
-  //     <Link to={`/project-submit/${user?.projectId}`}>
-  //       Đổi địa điểm
-  //     </Link>
-  //   </li>
-  // )}
-
+  const [code, setCode] = useState("");
+  const nav = useNavigate()
+  const handleSubmit = () => {
+    console.log(code);
+    nav(`analysis/${code}`)
+    setCode('');
+  };
   const items = [
     user?.type === "SUPER_ADMIN"
       ? {
@@ -56,28 +50,34 @@ const Header = () => {
     },
   ].filter((e) => !!e);
   console.log({ items });
-  const { data: project } = useShowProject(projectId);
+  // const { data: project } = useShowProject(projectId);
   return (
     <header className="">
-      <nav class="bg-white border-gray-200 lg:px-6 py-2.5 dark:bg-gray-800">
+      <nav class="bg-slate-300 border-gray-200 lg:px-6 py-2.5 dark:bg-gray-800">
         <div class="flex flex-wrap justify-between items-center">
           <Link to={"/"} class="flex items-center">
             <img
               src={
-                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUKp8LL7anaCk0jimSkN2jbsRUCKSUxvW_qg&usqp=CAU"
+                "https://cdn6.aptoide.com/imgs/b/9/c/b9cac9b36d84fbb1c2159b14c3175e72_icon.png"
               }
               class="mr-3 h-12 sm:h-12"
-              alt="Flowbite Logo"
+              alt="Logo"
             />
-            {/* <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
-              Blue Sky
-            </span> */}
+            <span class="font-actor text-[#135dac] text-4xl font-bold dark:text-white">
+            HNV Link Shortener
+            </span>
           </Link>
-          {project && (
-            <div className="text-2xl font-bold uppercase text-[#135dac] overflow-hidden flex-shrink lg:w-[300px] w-48">
-              <span className="line-clamp-1"> {project?.title}</span>
+            <div className="text-xl font-bold uppercase text-[#135dac]  flex-shrink lg:w-[500px]">
+              <span className="font-actor">Explore Shorten Code</span>
+              <Input.Search
+            className="mr-5"
+            value={code}
+            placeholder="Nhập code"
+            onChange={(e) => setCode(e.target.value)}
+            onSearch={handleSubmit}
+
+          />
             </div>
-          )}
         </div>
       </nav>
     </header>
