@@ -3,9 +3,11 @@ import ShortenFormCreateInline from "../components/Form/inline";
 import useCreateShorten from "../hooks/mutate/useCreateShorten";
 import { Alert, message } from "antd";
 import Paragraph from "antd/es/typography/Paragraph";
-
+import "./../../../App.css"
+import { useNavigate } from "react-router-dom/dist";
 const CreateShortLink = () => {
   const { mutate: fnCreate, data } = useCreateShorten();
+
   const handleCreate = (v) => {
     fnCreate(v, {
       onSuccess: () => {
@@ -14,27 +16,32 @@ const CreateShortLink = () => {
     });
   };
   return (
-    <div>
-      Insert Landing Page Here
-      <h2>d</h2>
-      <div className="grid grid-cols-3">
-        <div>
+      <div className="glass-container mt-2">
+      <div className="landing-page-container p-40 pl-80 pr-80">
+        <div className="landing-page-header text-center">
+          <h1 className="font-actor">Welcome to our Link Shortener</h1>
+          <h2 className="font-actor">Paste the URL to be shortened!</h2>
+        </div>
+        <div className="landing-page-content">
           <ShortenFormCreateInline onFinish={handleCreate} />
           {data && (
+            <>
+            <h2 className="text-center font-actor">Your link has been shorten</h2>
             <Alert
+              className="shortened-link-alert"
               message={
                 <Paragraph
                   copyable={{
                     text: `${window.location.host}/r/${data?.codeLink}`,
                   }}
                 >
-                  Link `{data?.originalLink}` have been shorten
+                  <h4 className="text-center font-actor">{window.location.host}/r/{data?.codeLink}</h4>
                 </Paragraph>
               }
             ></Alert>
+            </>
           )}
         </div>
-        <div className="col-span-2"></div>
       </div>
     </div>
   );
