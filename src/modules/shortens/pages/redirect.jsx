@@ -29,7 +29,7 @@ const RedirectShortLink = () => {
         }, 1000);
         // Redirect after 10 seconds
         const redirectTimeout = setTimeout(() => {
-          if(data && data?.status !== 404){
+          if(data){
             window.location.href = data?.originalLink;
           }else{
             window.location.href = "/";

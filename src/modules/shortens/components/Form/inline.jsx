@@ -58,7 +58,7 @@ const ShortenFormCreateInline = ({
           <Input placeholder="Nhập Shorten Link code" />
         </Form.Item>
           <Form.Item name={"Password"}>
-          <Input placeholder="Nhập Password" />
+          <Input.Password placeholder="Nhập Password" />
         </Form.Item>
         </>
       )}
