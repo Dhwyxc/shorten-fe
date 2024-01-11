@@ -19,11 +19,11 @@ const Header = () => {
   const projectId = match?.params?.projectId;
 
   const [code, setCode] = useState("");
-  const nav = useNavigate()
+  const nav = useNavigate();
   const handleSubmit = () => {
     console.log(code);
-    nav(`analysis/${code}`)
-    setCode('');
+    nav(`analysis/${code}`);
+    setCode("");
   };
   const items = [
     user?.type === "SUPER_ADMIN"
@@ -53,31 +53,27 @@ const Header = () => {
   // const { data: project } = useShowProject(projectId);
   return (
     <header className="">
-      <nav class="bg-slate-300 border-gray-200 lg:px-6 py-2.5 dark:bg-gray-800">
+      <nav class=" border-gray-200 lg:px-6 py-2.5 dark:bg-gray-800">
         <div class="flex flex-wrap justify-between items-center">
           <Link to={"/"} class="flex items-center">
             <img
-              src={
-                "https://cdn6.aptoide.com/imgs/b/9/c/b9cac9b36d84fbb1c2159b14c3175e72_icon.png"
-              }
+              src={"https://i.ibb.co/rGZC82r/images-removebg-preview.png"}
               class="mr-3 h-12 sm:h-12"
               alt="Logo"
             />
-            <span class="font-actor text-[#135dac] text-4xl font-bold dark:text-white">
-            HNV Link Shortener
+            <span class="font-actor text-primary text-4xl font-bold dark:text-white">
+              Express Shortener
             </span>
           </Link>
-            <div className="text-xl font-bold uppercase text-[#135dac]  flex-shrink lg:w-[500px]">
-              <span className="font-actor">Explore Shorten Code</span>
-              <Input.Search
-            className="mr-5"
-            value={code}
-            placeholder="Nhập code"
-            onChange={(e) => setCode(e.target.value)}
-            onSearch={handleSubmit}
-
-          />
-            </div>
+          <div className="text-xl font-bold uppercase text-primary  flex-shrink lg:w-[500px]">
+            <Input.Search
+              className="mr-5"
+              value={code}
+              placeholder="Enter code to analysis"
+              onChange={(e) => setCode(e.target.value)}
+              onSearch={handleSubmit}
+            />
+          </div>
         </div>
       </nav>
     </header>

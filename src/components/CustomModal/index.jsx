@@ -1,6 +1,6 @@
 import useModal from "@hooks/useModal";
 import { Button, Drawer, Modal } from "antd";
-import React from "react";
+import React, { useCallback } from "react";
 import { useImperativeHandle } from "react";
 const CustomModal = (
   {
@@ -13,10 +13,22 @@ const CustomModal = (
     footer,
     destroyOnClose = true,
     onOk,
+    onClose,
+    isRealModal = true,
   },
   ref
 ) => {
-  const { close, open, toggle, isOpen } = useModal({ initialOpen: false });
+  const {
+    close: closeOnly,
+    open,
+    toggle,
+    isOpen,
+  } = useModal({ initialOpen: false });
+  const close = useCallback(() => {
+    closeOnly();
+    onClose?.();
+  }, [closeOnly, onClose]);
+
   useImperativeHandle(
     ref,
     () => {
@@ -36,20 +48,41 @@ const CustomModal = (
         </>
       )}
 
-      <Modal
-        footer={footer}
-        width={width}
-        maskClosable={true}
-        destroyOnClose={destroyOnClose}
-        closable={true}
-        onOk={onOk || close}
-        title={title || "Tiêu đề"}
-        // onClose={close}
-        onCancel={close}
-        open={isOpen}
-      >
-        {children?.({ open, close }) || children}
-      </Modal>
+      {isRealModal ? (
+        <Modal
+          onCancel={() => {
+            close();
+            onClose?.();
+          }}
+          footer={footer}
+          width={width}
+          maskClosable={true}
+          destroyOnClose={destroyOnClose}
+          closable={true}
+          onOk={onOk || close}
+          title={title || "Tiêu đề"}
+          // onClose={close}
+          // onCancel={close}
+          open={isOpen}
+        >
+          {children?.({ open, close }) || children}
+        </Modal>
+      ) : (
+        <Drawer
+          width={width}
+          destroyOnClose={true}
+          closable={true}
+          title={title || "Tiêu đề"}
+          placement={placement}
+          onClose={() => {
+            close();
+            onClose?.();
+          }}
+          open={isOpen}
+        >
+          {children?.({ open, close }) || children}
+        </Drawer>
+      )}
     </>
   );
 };

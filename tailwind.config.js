@@ -3,7 +3,11 @@ module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx,css}", "./index.html"],
   darkMode: "class", // or 'media' or 'class'
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        primary: "#00B649",
+      },
+    },
     fontFamily: {
       sans: ["Montserrat", "sans-serif"],
       serif: ["Merriweather", "serif"],

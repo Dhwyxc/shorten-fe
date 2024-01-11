@@ -13,6 +13,7 @@ import { configReactQuery } from "@config/react-query";
 import { persistor, store } from "@app/store";
 import { PersistGate } from "redux-persist/integration/react";
 import "./index.css";
+import { ConfigProvider } from "antd";
 // console.log(store.);k
 configAxios(store);
 const qc = configReactQuery({ store });
@@ -23,7 +24,15 @@ ReactDOM.render(
         <PersistGate loading={null} persistor={persistor}>
           <BrowserRouter basename={import.meta.env.PUBLIC_URL}>
             <QueryClientProvider client={qc}>
-              <App />
+              <ConfigProvider
+                theme={{
+                  token: {
+                    colorPrimary: "#00B649",
+                  },
+                }}
+              >
+                <App />
+              </ConfigProvider>
             </QueryClientProvider>
           </BrowserRouter>
         </PersistGate>

@@ -4,3 +4,11 @@ export const array2Object = (arr, key, value_only) => {
     return all;
   }, {});
 };
+export const array2Group = (arr, key) => {
+  return arr?.reduce(function (r, a) {
+    const k = a?.[key];
+    r[k] = r[k] || [];
+    r[k].push(a);
+    return r;
+  }, Object.create(null));
+};

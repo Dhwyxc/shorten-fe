@@ -1,14 +1,11 @@
 import { Button, Checkbox, Form, Input } from "antd";
-import React, { useState } from "react";
+import React, { forwardRef, useState } from "react";
 import { nanoid } from "nanoid";
 
-const ShortenFormCreateInline = ({
-  loading,
-  onFinish,
-  initialValues,
-  okText = "Create",
-}) => {
-  const [form] = Form.useForm();
+const ShortenFormCreateInline = (
+  { loading, onFinish, initialValues, okText = "Create", form },
+  ref
+) => {
   const [showCodeLink, setShowCodeLink] = useState(false);
 
   const toggleCodeLink = () => {
@@ -39,27 +36,56 @@ const ShortenFormCreateInline = ({
       <Form.Item
         rules={[
           {
-            message: "Vui lòng nhập",
+            message: "Require",
             required: true,
+          },
+          {
+            validator(_, value) {
+              if (!value) {
+                return Promise.resolve();
+              }
+              try {
+                new URL(value);
+                return Promise.resolve();
+              } catch (error) {}
+              return Promise.reject(new Error("Url is valid"));
+            },
           },
         ]}
         name={"OriginalLink"}
       >
-        <Input placeholder="Nhập link cần rút gọn" />
+        <Input ref={ref} placeholder="Original link" />
       </Form.Item>
-      
+
       <Form.Item>
         <Checkbox onChange={toggleCodeLink}>Advanced Options</Checkbox>
       </Form.Item>
 
       {showCodeLink && (
         <>
-        <Form.Item name={"CodeLink"}>
-          <Input placeholder="Nhập Shorten Link code" />
-        </Form.Item>
+          <Form.Item
+            rules={[
+              {
+                validator(_, value) {
+                  if (!value) {
+                    return Promise.resolve();
+                  }
+                  let res = /^[a-zA-Z]+$/.test(value);
+                  if (res) return Promise.resolve();
+
+                  return Promise.reject(
+                    new Error("code only english letters allowed")
+                  );
+                },
+              },
+            ]}
+            name={"CodeLink"}
+          >
+            <Input placeholder="Custom code" />
+          </Form.Item>
           <Form.Item name={"Password"}>
-          <Input.Password placeholder="Nhập Password" />
-        </Form.Item>
+            <Input.Password placeholder="Enter Password" />
+          </Form.Item>
         </>
       )}
 
@@ -79,4 +105,4 @@ const ShortenFormCreateInline = ({
   );
 };
 
-export default ShortenFormCreateInline;
+export default forwardRef(ShortenFormCreateInline);

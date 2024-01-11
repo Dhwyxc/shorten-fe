@@ -13,6 +13,16 @@ export const createShorten = async (input) => {
   const { data } = await axios.post(`shortens`, input);
   return data;
 };
+export const collectInfo = async (id, input) => {
+  const { data } = await axios.post(`shortens/collect/${id}`, input);
+  return data;
+};
+export const fetchAnalysis = async (id, query) => {
+  const { data } = await axios.get(
+    stringifyUrl({ url: `shortens/analysis/${id}`, query })
+  );
+  return data;
+};
 export const createBulkShorten = async (input) => {
   const { data } = await axios.post(`shortens/bulk/create`, input);
   return data;
