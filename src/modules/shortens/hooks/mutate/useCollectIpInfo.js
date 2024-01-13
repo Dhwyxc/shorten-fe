@@ -7,6 +7,9 @@ const useCollectIpInfo = (id) => {
     mutationFn: async (formData) => {
       return await collectInfo(id, formData);
     },
+    onSuccess:()=>{
+      console.log("x");
+    }
   });
 };
 

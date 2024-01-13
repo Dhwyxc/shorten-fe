@@ -1,13 +1,25 @@
 import React, { useMemo } from "react";
 import useShowShorten from "../hooks/query/useShowShorten";
-import { Result, Button, Card, Form, DatePicker, Statistic } from "antd";
+import { Result, Button, Card, Form, DatePicker, Statistic, Popconfirm, Divider, QRCode, Space } from "antd";
 import "./../../../App.css";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import useGetAnalysis from "../hooks/query/useGetAnalysis";
 import ChartComponent from "@components/ChartComponent";
 import { array2Group, array2Object } from "@helper/array2Obj";
 import useSearchQuery from "@hooks/useSearchQuery";
 import { SearchOutlined, AimOutlined } from "@ant-design/icons";
+import useDeleteShorten from "../hooks/mutate/useDeleteShorten";
+import Paragraph from "antd/es/typography/Paragraph";
+import {
+  HomeOutlined,
+  LoadingOutlined,
+  SettingFilled,
+  SmileOutlined,
+  SyncOutlined,
+  LinkOutlined,
+  SmileFilled,
+} from "@ant-design/icons";
+import CustomModal from "@components/CustomModal";
 const AnalysisShortLink = () => {
   const { code } = useParams();
   const { initSearchValues, search, setSearch } = useSearchQuery();
@@ -50,6 +62,16 @@ const AnalysisShortLink = () => {
 
     return obj;
   }, [analysis]);
+  const {mutate:deleteFn}= useDeleteShorten()
+  const nav = useNavigate()
+  const onDelete=()=>{
+    deleteFn(data?.id,{
+      onSuccess:()=>{
+        nav("/")
+      }
+    });
+  }
+  const canDelete = !!window.localStorage.getItem("owner."+code)
   return (
     <div>
       <Form
@@ -81,10 +103,56 @@ const AnalysisShortLink = () => {
         <div>
           <div className="my-2">
             {" "}
-            <Card bordered={false}>
+            <Card  extra={canDelete && <Space> <CustomModal
+          
+              txtBtn="Get link"
+        title={"Your link has been shorten"}
+       
+      >
+        {() => {
+          return (
+            <div>
+              <div className="flex justify-center">
+                <div>
+                  <div id="myqrcode">
+                    <QRCode
+                      value={`http://${window.location.host}/r/${data?.codeLink}`}
+                      bgColor="#fff"
+                      size={200}
+                      style={{
+                        marginTop: 16,
+                        marginBottom: 16,
+                      }}
+                    />
+                    <Button type="primary" >
+                      Download
+                    </Button>
+                  </div>
+                </div>
+              </div>
+              <Divider>Or copy link</Divider>
+
+              <Paragraph
+                className="text-primary text-2xl font-semibold"
+                copyable={{
+                  icon: [
+                    <SmileOutlined key="copy-icon" />,
+                    <SmileFilled key="copied-icon" />,
+                  ],
+                  tooltips: ["click here", "you clicked!!"],
+                }}
+              >
+                {`${window.location.host}/r/${data?.codeLink}`}
+              </Paragraph>
+            </div>
+          );
+        }}
+      </CustomModal><Popconfirm onConfirm={()=>{
+              onDelete()
+            }} title="You sure? this will cannot undo."><Button type="primary" danger>Delete</Button></Popconfirm></Space>} bordered={false}>
               <Statistic
                 title="Total Click"
-                value={dataCountry?.countAccess || 0}
+                value={data?.countAccess || 0}
                 // precision={2}
                 valueStyle={{
                   color: "#3f8600",
@@ -93,6 +161,7 @@ const AnalysisShortLink = () => {
                 suffix="click"
               />
             </Card>
+            
           </div>
 
           <div className="grid grid-cols-4 gap-4">

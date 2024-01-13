@@ -15,6 +15,7 @@ const CustomModal = (
     onOk,
     onClose,
     isRealModal = true,
+    txtBtn="Open"
   },
   ref
 ) => {
@@ -42,7 +43,7 @@ const CustomModal = (
         <>
           {button?.({ open, toggle }) || (
             <Button onClick={open} type="primary">
-              Open
+              {txtBtn}
             </Button>
           )}
         </>

@@ -20,6 +20,7 @@ const CreateShortLink = () => {
   const handleCreate = (v) => {
     fnCreate(v, {
       onSuccess: () => {
+        window.localStorage.setItem("owner."+v?.CodeLink,"ok");
         message.success("Done!");
         refModal.current?.open();
       },

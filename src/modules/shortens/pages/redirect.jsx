@@ -25,7 +25,7 @@ const RedirectShortLink = () => {
 
   const handleSubmit = async () => {
     // Kiểm tra mật khẩu
-    if (password === data?.password) {
+    if (password == data?.password) {
       message.success("Go go go!");
       await collectFn();
       window.location.href = data?.originalLink;
